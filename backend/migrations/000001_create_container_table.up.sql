@@ -5,5 +5,6 @@ CREATE TABLE IF NOT EXISTS container (
 	status VARCHAR NOT NULL DEFAULT 'unknown',
 	version INT NOT NULL DEFAULT 1,
 	ping INT NOT NULL DEFAULT 0,
-	updated_at TIMESTAMP NOT NULL DEFAULT NOW()
+	--updated_at TIMESTAMP NOT NULL DEFAULT to_timestamp(0)
+        updated_at TIMESTAMP
 );

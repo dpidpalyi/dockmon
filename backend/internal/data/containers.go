@@ -19,8 +19,8 @@ type Container struct {
 	Status  string `json:"status"`
 	Version int    `json:"version"`
 	// in ns
-	Ping      int       `json:"ping"`
-	UpdatedAt time.Time `json:"updated_at"`
+	Ping      int        `json:"ping"`
+	UpdatedAt *time.Time `json:"updated_at"`
 }
 
 func ValidateContainer(v *validator.Validator, container *Container) {
@@ -35,18 +35,66 @@ func (m ContainerModel) Insert(ctx context.Context, c *Container) error {
 	stmt := `
 	    INSERT INTO container(name, ip)
 	    VALUES ($1, $2)
-	    RETURNING id, version
+	    RETURNING id, version, status, ping, updated_at
 	`
 
 	args := []any{c.Name, c.IP}
 
-	return m.DB.QueryRowContext(ctx, stmt, args...).Scan(&c.ID, &c.Version)
+	return m.DB.QueryRowContext(ctx, stmt, args...).Scan(
+		&c.ID,
+		&c.Version,
+		&c.Status,
+		&c.Ping,
+		&c.UpdatedAt,
+	)
 }
 
 func (m ContainerModel) Get(ctx context.Context, id int) (*Container, error) {
-	//stmt := `
-	//    SELECT id, name, ip, status, version
-	//`
+	stmt := `
+	    SELECT id, name, ip, status, version, ping, updated_at
+		FROM container
+		WHERE id = $1`
 
-	return nil, nil
+	var c Container
+
+	err := m.DB.QueryRowContext(ctx, stmt, id).Scan(
+		&c.ID,
+		&c.Name,
+		&c.IP,
+		&c.Status,
+		&c.Version,
+		&c.Ping,
+		&c.UpdatedAt,
+	)
+
+	if err != nil {
+		return nil, err
+	}
+
+	return &c, nil
+}
+
+func (m ContainerModel) Update(ctx context.Context, c *Container) error {
+	stmt := `
+	    UPDATE container
+	    SET name = $1, ip = $2, status = $3, version = version + 1, ping = $4, updated_at = $5
+	    WHERE id = $6 AND version = $7
+	    RETURNING version`
+
+	args := []any{
+		c.Name,
+		c.IP,
+		c.Status,
+		c.Ping,
+		c.UpdatedAt,
+		c.ID,
+		c.Version,
+	}
+
+	err := m.DB.QueryRowContext(ctx, stmt, args...).Scan(&c.Version)
+	if err != nil {
+		return err
+	}
+
+	return nil
 }
