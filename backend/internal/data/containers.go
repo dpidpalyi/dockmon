@@ -4,6 +4,7 @@ import (
 	"backend/internal/validator"
 	"context"
 	"database/sql"
+	"errors"
 	"net/netip"
 	"time"
 )
@@ -68,6 +69,9 @@ func (m ContainerModel) Get(ctx context.Context, id int) (*Container, error) {
 	)
 
 	if err != nil {
+		if errors.Is(err, sql.ErrNoRows) {
+			return nil, ErrRecordNotFound
+		}
 		return nil, err
 	}
 
@@ -93,7 +97,32 @@ func (m ContainerModel) Update(ctx context.Context, c *Container) error {
 
 	err := m.DB.QueryRowContext(ctx, stmt, args...).Scan(&c.Version)
 	if err != nil {
+		if errors.Is(err, sql.ErrNoRows) {
+			return ErrEditConflict
+		}
 		return err
+	}
+
+	return nil
+}
+
+func (m ContainerModel) Delete(ctx context.Context, id int) error {
+	stmt := `
+	    DELETE FROM container
+	    WHERE id = $1`
+
+	result, err := m.DB.ExecContext(ctx, stmt, id)
+	if err != nil {
+		return err
+	}
+
+	rows, err := result.RowsAffected()
+	if err != nil {
+		return err
+	}
+
+	if rows == 0 {
+		return ErrRecordNotFound
 	}
 
 	return nil

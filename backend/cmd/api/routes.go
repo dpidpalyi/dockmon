@@ -9,6 +9,7 @@ func (app *application) routes() *http.ServeMux {
 	mux.HandleFunc("POST /api/containers", app.insertContainer)
 	mux.HandleFunc("GET /api/containers/{id}", app.getContainer)
 	mux.HandleFunc("PATCH /api/containers/{id}", app.updateContainer)
+	mux.HandleFunc("DELETE /api/containers/{id}", app.deleteContainer)
 
 	return mux
 }

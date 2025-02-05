@@ -4,6 +4,7 @@ import (
 	"backend/internal/data"
 	"backend/internal/validator"
 	"context"
+	"errors"
 	"fmt"
 	"net/http"
 	"strconv"
@@ -77,7 +78,12 @@ func (app *application) getContainer(w http.ResponseWriter, r *http.Request) {
 
 	container, err := app.models.Containers.Get(ctx, id)
 	if err != nil {
-		app.serverErrorResponse(w, r, err)
+		switch {
+		case errors.Is(err, data.ErrRecordNotFound):
+			app.notFoundResponse(w, r)
+		default:
+			app.serverErrorResponse(w, r, err)
+		}
 		return
 	}
 
@@ -99,7 +105,12 @@ func (app *application) updateContainer(w http.ResponseWriter, r *http.Request) 
 
 	container, err := app.models.Containers.Get(ctx, id)
 	if err != nil {
-		app.serverErrorResponse(w, r, err)
+		switch {
+		case errors.Is(err, data.ErrRecordNotFound):
+			app.notFoundResponse(w, r)
+		default:
+			app.serverErrorResponse(w, r, err)
+		}
 		return
 	}
 
@@ -150,6 +161,33 @@ func (app *application) updateContainer(w http.ResponseWriter, r *http.Request) 
 	}
 
 	err = app.writeJSON(w, http.StatusOK, container, nil)
+	if err != nil {
+		app.serverErrorResponse(w, r, err)
+	}
+}
+
+func (app *application) deleteContainer(w http.ResponseWriter, r *http.Request) {
+	id, err := strconv.Atoi(r.PathValue("id"))
+	if err != nil || id < 1 {
+		app.notFoundResponse(w, r)
+		return
+	}
+
+	ctx, cancel := context.WithTimeout(context.Background(), responseTimeout*time.Second)
+	defer cancel()
+
+	err = app.models.Containers.Delete(ctx, id)
+	if err != nil {
+		switch {
+		case errors.Is(err, data.ErrRecordNotFound):
+			app.notFoundResponse(w, r)
+		default:
+			app.serverErrorResponse(w, r, err)
+		}
+		return
+	}
+
+	err = app.writeJSON(w, http.StatusOK, envelope{"message": "container successfully deleted"}, nil)
 	if err != nil {
 		app.serverErrorResponse(w, r, err)
 	}
