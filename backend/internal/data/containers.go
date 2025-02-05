@@ -127,3 +127,40 @@ func (m ContainerModel) Delete(ctx context.Context, id int) error {
 
 	return nil
 }
+
+func (m ContainerModel) List(ctx context.Context) ([]*Container, error) {
+	stmt := `
+	    SELECT id, name, ip, status, version, ping, updated_at
+	    FROM container
+	`
+
+	rows, err := m.DB.Query(stmt)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+
+	var cs []*Container
+
+	for rows.Next() {
+		c := &Container{}
+		err := rows.Scan(
+			&c.ID,
+			&c.Name,
+			&c.IP,
+			&c.Status,
+			&c.Version,
+			&c.Ping,
+			&c.UpdatedAt,
+		)
+		if err != nil {
+			return nil, err
+		}
+		cs = append(cs, c)
+	}
+	if err = rows.Err(); err != nil {
+		return nil, err
+	}
+
+	return cs, nil
+}

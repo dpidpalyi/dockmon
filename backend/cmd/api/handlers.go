@@ -192,3 +192,19 @@ func (app *application) deleteContainer(w http.ResponseWriter, r *http.Request) 
 		app.serverErrorResponse(w, r, err)
 	}
 }
+
+func (app *application) listContainer(w http.ResponseWriter, r *http.Request) {
+	ctx, cancel := context.WithTimeout(context.Background(), responseTimeout*time.Second)
+	defer cancel()
+
+	containers, err := app.models.Containers.List(ctx)
+	if err != nil {
+		app.serverErrorResponse(w, r, err)
+		return
+	}
+
+	err = app.writeJSON(w, http.StatusOK, containers, nil)
+	if err != nil {
+		app.serverErrorResponse(w, r, err)
+	}
+}
