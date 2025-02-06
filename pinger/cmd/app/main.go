@@ -50,8 +50,18 @@ func (app *application) Run() {
 	}
 
 	for _, c := range cs {
-		c.Ping = 100
-		c.Status = "up"
+		ping, err := app.Ping(c.IP)
+		if err != nil {
+			app.errorLogger.Print(err)
+			if c.Status == "up" {
+				c.Status = "down"
+			} else {
+				continue
+			}
+		} else {
+			c.Ping = ping
+			c.Status = "up"
+		}
 		app.Send(c)
 	}
 }
