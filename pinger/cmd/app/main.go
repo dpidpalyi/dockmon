@@ -10,18 +10,20 @@ import (
 )
 
 type application struct {
-	url    string
-	logger *log.Logger
-	client http.Client
-	pinger *probing.Pinger
+	url         string
+	infoLogger  *log.Logger
+	errorLogger *log.Logger
+	client      http.Client
+	pinger      *probing.Pinger
 }
 
 func main() {
-	logger := log.New(os.Stdout, "INFO:\t", log.Ldate|log.Ltime)
+	infoLogger := log.New(os.Stdout, "INFO:\t", log.Ldate|log.Ltime)
+	errorLogger := log.New(os.Stderr, "ERROR:\t", log.Ldate|log.Ltime)
 
 	cfg, err := config.New(".")
 	if err != nil {
-		logger.Fatal(err)
+		errorLogger.Fatal(err)
 	}
 
 	client := http.Client{
@@ -31,10 +33,11 @@ func main() {
 	pinger := probing.New("127.0.0.1")
 
 	app := &application{
-		url:    cfg.APIurl,
-		logger: logger,
-		client: client,
-		pinger: pinger,
+		url:         cfg.APIurl,
+		infoLogger:  infoLogger,
+		errorLogger: errorLogger,
+		client:      client,
+		pinger:      pinger,
 	}
 
 	app.Run()
@@ -43,10 +46,12 @@ func main() {
 func (app *application) Run() {
 	cs, err := app.Get()
 	if err != nil {
-		app.logger.Print(err)
+		app.errorLogger.Print(err)
 	}
 
 	for _, c := range cs {
-		app.logger.Print(*c)
+		c.Ping = 100
+		c.Status = "up"
+		app.Send(c)
 	}
 }
