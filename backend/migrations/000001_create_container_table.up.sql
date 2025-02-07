@@ -4,7 +4,7 @@ CREATE TABLE IF NOT EXISTS container (
 	ip INET UNIQUE NOT NULL,
 	status VARCHAR NOT NULL DEFAULT 'unknown',
 	version INT NOT NULL DEFAULT 1,
-	ping INT NOT NULL DEFAULT 0,
+	ping DOUBLE PRECISION NOT NULL DEFAULT 0.0,
 	--updated_at TIMESTAMP NOT NULL DEFAULT to_timestamp(0)
         updated_at TIMESTAMP
 );

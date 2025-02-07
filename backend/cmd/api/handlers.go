@@ -115,10 +115,10 @@ func (app *application) updateContainer(w http.ResponseWriter, r *http.Request) 
 	}
 
 	var input struct {
-		Name   *string `json:"name"`
-		IP     *string `json:"ip"`
-		Status *string `json:"status"`
-		Ping   *int    `json:"ping"`
+		Name   *string  `json:"name"`
+		IP     *string  `json:"ip"`
+		Status *string  `json:"status"`
+		Ping   *float64 `json:"ping"`
 	}
 
 	err = app.readJSON(r, &input)

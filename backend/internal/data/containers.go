@@ -20,7 +20,7 @@ type Container struct {
 	Status  string `json:"status"`
 	Version int    `json:"version"`
 	// in ns
-	Ping      int        `json:"ping"`
+	Ping      float64    `json:"ping"`
 	UpdatedAt *time.Time `json:"updated_at"`
 }
 
