@@ -4,13 +4,12 @@ import (
 	"bytes"
 	"encoding/json"
 	"fmt"
-	"io"
 	"net/http"
 	"pinger/internal/data"
 )
 
 func (app *application) Get() ([]*data.Container, error) {
-	req, err := http.NewRequest("GET", app.url, nil)
+	req, err := http.NewRequest("GET", app.config.APIurl, nil)
 	req.Header.Add("Accept", "application/json")
 	resp, err := app.client.Do(req)
 	if err != nil {
@@ -39,7 +38,7 @@ func (app *application) Send(container *data.Container) error {
 		return err
 	}
 
-	url := fmt.Sprintf("%v/%d", app.url, container.ID)
+	url := fmt.Sprintf("%v/%d", app.config.APIurl, container.ID)
 	req, err := http.NewRequest("PATCH", url, bytes.NewBuffer(js))
 	req.Header.Set("Content-type", "application/json")
 	resp, err := app.client.Do(req)
@@ -48,8 +47,16 @@ func (app *application) Send(container *data.Container) error {
 	}
 	defer resp.Body.Close()
 
-	data, _ := io.ReadAll(resp.Body)
-	app.infoLogger.Printf("%s", data)
+	switch resp.StatusCode {
+	case http.StatusInternalServerError:
+		return fmt.Errorf("internal api server error")
+	case http.StatusNotFound:
+		return fmt.Errorf("the requested container ID:%v could not be found", container.ID)
+	case http.StatusUnprocessableEntity:
+		return fmt.Errorf("invalidated data provided to server")
+	case http.StatusBadRequest:
+		return fmt.Errorf("wrong JSON data provided to server")
+	}
 
 	return nil
 }

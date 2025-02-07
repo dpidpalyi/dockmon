@@ -7,8 +7,12 @@ import (
 )
 
 type Config struct {
-	APIurl         string        `mapstructure:"API_URL"`
-	RequestTimeout time.Duration `mapstructure:"REQUEST_TIMEOUT"`
+	APIurl            string        `mapstructure:"API_URL"`
+	APIRequestTimeout time.Duration `mapstructure:"API_REQUEST_TIMEOUT"`
+	IterationDelay    time.Duration `mapstructure:"ITERATION_DELAY"`
+	Count             int           `mapstructure:"COUNT"`
+	Interval          time.Duration `mapstructure:"INTERVAL"`
+	Timeout           time.Duration `mapstructure:"TIMEOUT"`
 }
 
 func New(path string) (Config, error) {
@@ -17,6 +21,12 @@ func New(path string) (Config, error) {
 	viper.SetConfigName(".app")
 	viper.SetConfigType("env")
 	viper.AddConfigPath(path)
+
+	viper.SetDefault("API_REQUEST_TIMEOUT", "1s")
+	viper.SetDefault("ITERATION_DELAY", "5s")
+	viper.SetDefault("COUNT", 5)
+	viper.SetDefault("INTERVAL", "100ms")
+	viper.SetDefault("TIMEOUT", "1s")
 
 	if err := viper.ReadInConfig(); err != nil {
 		return Config{}, err
