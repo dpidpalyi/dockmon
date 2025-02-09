@@ -3,7 +3,7 @@ package config
 import "github.com/spf13/viper"
 
 type Config struct {
-	ServerAddress string `mapstructure:"SERVER_ADDRESS"`
+	ServerPort string `mapstructure:"SERVER_PORT"`
 	PgDSN         string `mapstructure:"PG_DSN"`
 	MigratePath   string `mapstructure:"MIGRATE_PATH"`
 }
@@ -11,7 +11,7 @@ type Config struct {
 func New(path string) (Config, error) {
 	var cfg Config
 
-	viper.SetConfigName(".app")
+	viper.SetConfigName(".env")
 	viper.SetConfigType("env")
 	viper.AddConfigPath(path)
 

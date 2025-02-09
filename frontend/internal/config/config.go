@@ -15,7 +15,7 @@ type Config struct {
 func New(path string) (Config, error) {
 	var cfg Config
 
-	viper.SetConfigName(".app")
+	viper.SetConfigName(".env")
 	viper.SetConfigType("env")
 	viper.AddConfigPath(path)
 

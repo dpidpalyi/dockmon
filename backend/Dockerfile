@@ -6,13 +6,14 @@ COPY go.mod go.sum ./
 RUN go mod download
 
 COPY . .
-RUN go build -o pinger ./cmd/app/
+RUN go build -o api ./cmd/api
 
 FROM alpine
 
 WORKDIR /app
 
-COPY --from=builder /app/pinger .
+COPY --from=builder /app/api .
 COPY .env .
+COPY migrations ./migrations
 
-CMD ["./pinger"]
+CMD ["./api"]

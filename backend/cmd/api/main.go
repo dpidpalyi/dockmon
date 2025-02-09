@@ -40,7 +40,7 @@ func main() {
 	}
 
 	srv := &http.Server{
-		Addr:    cfg.ServerAddress,
+		Addr:    cfg.ServerPort,
 		Handler: app.routes(),
 	}
 
