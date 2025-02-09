@@ -1,0 +1,30 @@
+{{define "title"}}Home{{end}}
+
+{{define "main"}}
+     <h2>Containers</h2>
+     {{if .Containers}}
+     <table>
+     <tr>
+	     <th>ID</th>
+	     <th>Name</th>
+	     <th>IP</th>
+	     <th>Status</th>
+	     <th>Ping</th>
+	     <th>Updated</th>
+     </tr>
+     {{range .Containers}}
+     <tr>
+	     <td>#{{.ID}}</td>
+	     <td><a href='/view?id={{.ID}}'>{{.Name}}</a></td>
+	     <td>{{.IP}}</td>
+	     <td>{{.Status}}</td>
+	     <td>{{.Ping}}</td>
+	     <td>{{.UpdatedAt}}</td>
+     </tr>
+     {{end}}
+     </table>
+     {{else}}
+	     <p>Still nothing to show...</p>
+     {{end}}
+{{end}}
+

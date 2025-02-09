@@ -1,0 +1,22 @@
+{{define "base"}}
+<!doctype html>
+<html lang='en'>
+	<head>
+		<meta charse='uft-8'>
+		<meta http-equiv="refresh" content="60">
+		<title>{{template "title" .}}Dockmon</title>
+		<link rel='stylesheet' href='/static/css/main.css'>
+	</head>
+	<body>
+		<header>
+			<h1><a href='/'>Dockmon</a></h1>
+		</header>
+		{{template "nav" .}}
+		<main>
+			{{template "main" .}}
+		</main>
+		<footer>Thanks to <a href='https://go.dev/'>Go</a></footer>
+	</body>
+</html>
+{{end}}
+

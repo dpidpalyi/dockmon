@@ -1,0 +1,17 @@
+{{define "title"}}Add Container{{end}}
+
+{{define "main"}}
+<form action='/add' method='POST'>
+    <div>
+        <label>Name:</label>
+        <input type='text' name='name'>
+    </div>
+    <div>
+        <label>IP:</label>
+        <input type='text' name='ip'>
+    </div>
+    <div>
+        <input type='submit' value='Add container'>
+    </div>
+</form>
+{{end}}

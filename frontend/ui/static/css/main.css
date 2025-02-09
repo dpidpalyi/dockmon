@@ -1,0 +1,187 @@
+/* main.css */
+
+/* General styles */
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    color: #333;
+    background-color: #f0f4f8;
+    line-height: 1.6;
+}
+
+/* Header styles */
+header {
+    background-color: #607d8b;
+    color: #fff;
+    padding: 1rem 2rem;
+    text-align: center;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+header h1 {
+    margin: 0;
+    font-size: 2rem;
+}
+
+header h1 a {
+    text-decoration: none;
+    color: #fff;
+}
+
+/* Navigation styles */
+nav {
+    background-color: #455a64;
+    padding: 0.5rem 2rem;
+    text-align: center;
+}
+
+nav a {
+    color: #cfd8dc;
+    text-decoration: none;
+    margin: 0 1rem;
+    font-weight: bold;
+}
+
+nav a:hover {
+    color: #fff;
+    text-decoration: underline;
+}
+
+/* Main content styles */
+main {
+    padding: 2rem;
+}
+
+h2 {
+    text-align: center;
+    color: #607d8b;
+}
+
+/* Table styles */
+.details-table {
+    width: 80%;
+    max-width: 800px;
+    margin: 1rem auto;
+    border: 1px solid #ccc;
+
+}
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 2rem 0;
+    background-color: #ffffff;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+th, td {
+    padding: 1rem;
+    text-align: left;
+    border-bottom: 1px solid #ddd;
+}
+
+th {
+    background-color: #607d8b;
+    color: #fff;
+    text-transform: uppercase;
+}
+
+td a {
+    color: #1976d2;
+    text-decoration: none;
+}
+
+td a:hover {
+    text-decoration: underline;
+}
+
+/* Footer styles */
+footer {
+    background-color: #607d8b;
+    color: #fff;
+    text-align: center;
+    padding: 1rem 2rem;
+    margin-top: 2rem;
+}
+
+footer a {
+    color: #cfd8dc;
+    text-decoration: none;
+}
+
+footer a:hover {
+    color: #fff;
+    text-decoration: underline;
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+    body {
+        font-size: 90%;
+    }
+
+    table, th, td {
+        font-size: 0.9rem;
+    }
+}
+
+/* Form styles */
+form {
+    width: 80%;
+    max-width: 600px;
+    margin: 2rem auto;
+    padding: 2rem;
+    background-color: #ffffff;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+}
+
+form h2 {
+    margin-bottom: 1rem;
+    text-align: center;
+    color: #455a64;
+}
+
+form label {
+    display: block;
+    margin-bottom: 0.5rem;
+    font-weight: bold;
+    color: #333;
+}
+
+form input[type="text"],
+form select,
+form textarea {
+    width: 100%;
+    padding: 0.8rem;
+    margin-bottom: 1rem;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 1rem;
+    background-color: #f9f9f9;
+}
+
+form input[type="text"]:focus,
+form select:focus,
+form textarea:focus {
+    outline: none;
+    border-color: #607d8b;
+    background-color: #fff;
+}
+
+form button {
+    width: 100%;
+    padding: 0.8rem;
+    font-size: 1rem;
+    font-weight: bold;
+    color: #fff;
+    background-color: #607d8b;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    text-transform: uppercase;
+}
+
+form button:hover {
+    background-color: #455a64;
+}
